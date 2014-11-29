@@ -62,14 +62,12 @@ function orderFun(){
 	  var value=  $("#creditCard").val();
 	   alert(value);
 	   
-	var email = $.cookie("email");
-	var emailID= email.replace(/["]+/g,'');
-	alert("QUOTES REMOVED EMAIL ID:"+ emailID);
+	var userid = $.cookie("userid");
 	   jQuery
 		.ajax({
 			type : "POST",
 			url : "/cloudservices/rest/users/addPayment",
-			data : emailID,
+			data : userid,
 			contentType : "application/json; charset=utf-8",
 			dataType : "json",
 			success : function(data, status, jqXHR) {
@@ -148,95 +146,7 @@ function orderFun(){
 </div>
 </div>
 <!-- start header menu -->
-				<ul class="megamenu skyblue" id="catalogList">
-					<li><a class="color1" href="home.html">Home</a></li>
-					<li class="grid"><a class="color2" href="#">Computers</a>
-						<div class="megapanel">
-							<div class="row">
-								<div class="col1">
-									<div class="h_nav">
-										<h4>shop</h4>
-										<ul>
-											<li><a href="items.html?id=100">Laptops</a></li>
-											<li><a href="items.html?id=101">Desktops</a></li>
-											<li><a href="items.html?id=102">Software</a></li>
-
-										</ul>
-									</div>
-								</div>
-
-							</div>
-
-						</div></li>
-					<li class="active grid"><a class="color4" href="#">Cell
-							Phones</a>
-						<div class="megapanel">
-							<div class="row">
-								<div class="col1">
-									<div class="h_nav">
-										<h4>shop</h4>
-										<ul>
-											<li><a href="items.html?id=200">Android Cell Phones</a></li>
-											<li><a href="items.html?id=201">Apple iPhones</a></li>
-											<li><a href="items.html?id=202">SIM cards</a></li>
-										</ul>
-									</div>
-								</div>
-
-							</div>
-							<div class="row">
-								<div class="col2"></div>
-								<div class="col1"></div>
-								<div class="col1"></div>
-								<div class="col1"></div>
-								<div class="col1"></div>
-							</div>
-						</div></li>
-
-					<li class="active grid"><a class="color4" href="#">Cameras</a>
-						<div class="megapanel">
-							<div class="row">
-								<div class="col1">
-									<div class="h_nav">
-										<h4>shop</h4>
-										<ul>
-											<li><a href="items.html?id=300">Digital SLR Cameras</a></li>
-											<li><a href="items.html?id=301">Point & Shoot
-													Cameras</a></li>
-											<li><a href="items.html?id=302">Camcorders</a></li>
-										</ul>
-									</div>
-								</div>
-
-							</div>
-							<div class="row">
-								<div class="col2"></div>
-								<div class="col1"></div>
-								<div class="col1"></div>
-								<div class="col1"></div>
-								<div class="col1"></div>
-							</div>
-						</div></li>
-
-					<li><a class="color10" href="contact.html">Contact</a>
-						<div class="megapanel">
-							<div class="row">
-								<div class="col3">
-									<div class="h_nav">
-										<h4>contact us</h4>
-									</div>
-									<form class="contact">
-										<label for="name">Name</label> <input id="name" type="text" />
-										<label for="email">E-mail</label> <input id="email"
-											type="text" /> <label for="message">Message</label>
-										<textarea rows="8" id="message"></textarea>
-										<input type="submit" value="Send" />
-									</form>
-								</div>
-								<div class="col3"></div>
-							</div>
-						</div></li>
-				</ul>
+				
 			</div>
 		</div>
 	</div>

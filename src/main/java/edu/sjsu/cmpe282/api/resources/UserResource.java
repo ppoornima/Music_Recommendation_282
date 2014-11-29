@@ -51,13 +51,7 @@ public class UserResource {
 	
 	
 	
-	@GET
-	@Path("/getCategory")
-	public String getCategory(String catalogID )
-	{
-	
-		return userdao.getCategory(catalogID);
-	}
+
 	
 	
 	@POST
@@ -69,9 +63,9 @@ public class UserResource {
 	}
 	@POST
 	@Path("/orderHistory")
-	public String orderHistory(String emailID){
+	public String orderHistory(String userid){
 		
-		return userdao.orderHistory(emailID);
+		return userdao.orderHistory(userid);
 	} 
 	
 }

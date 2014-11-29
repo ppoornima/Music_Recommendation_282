@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>Online Shopping Website</title>
+<title>Online Music Recommendation Website</title>
 <link href="assets/css/bootstrap.css" rel='stylesheet' type='text/css' />
 <!-- jQuery (necessary JavaScript plugins) -->
 <script type='text/javascript' src="assets/js/jquery-1.11.1.min.js"></script>
@@ -36,8 +36,8 @@
 <script src="assets/js/jquery.cookie.js"></script>
 <script type="text/javascript">
 
-var email = $.cookie("email");
-var firstName= $.cookie("firstName") ;
+var userid = $.cookie("userid");
+//var firstName= $.cookie("firstName") ;
 var lastLoginTime = $.cookie("lastLoginTime");
 
 /* console.log("Value obtained from cookie First Name : "+ firstName );
@@ -47,7 +47,7 @@ console.log("Value obtained from cookie lastLoginTime : "+ lastLoginTime );
 
 $(document).ready(function(){
 		
-	$("#userNameJQ").append(firstName);
+	$("#userNameJQ").append(userid);
 	$("#lastLoginTime").append(lastLoginTime);	
 });
 
@@ -57,8 +57,7 @@ $(document).ready(function(){
 <script type="text/javascript">
 function signOutFun(){
 	
-	$.removeCookie("email"); 
-	$.removeCookie("firstName"); 
+	$.removeCookie("userid"); 
 	$.removeCookie("lastLoginTime"); 
 
 }
@@ -74,15 +73,15 @@ function signOutFun(){
 	function loadAjaxTable() {
 
 		// AJAX call to get all products from server end on page load
-var email = $.cookie("email");
-		var emailID = email.replace(/["]+/g,'');
+var userid = $.cookie("userid");
+	//	var emailID = email.replace(/["]+/g,'');
 
-		alert(emailID);
+		alert(userid);
 		jQuery
 				.ajax({
 					type : "POST",
 					url : "/cloudservices/rest/cart/viewItemsInCart",
-					data : emailID,
+					data : userid,
 					contentType : "application/json; charset=utf-8",
 					dataType : "json",
 					success : function(data, status, jqXHR) {
@@ -90,33 +89,34 @@ var email = $.cookie("email");
 						if (JSON.stringify(data["statusCode"]) == 200) {
 							alert("Status code : "+ JSON.stringify(data["statusCode"])+"\n Status message: "+ JSON.stringify(data["statusMessage"]) );
 							alert("data: \n"+ JSON.stringify(data["cartItems"])); 
-						var jsonData = JSON.parse(JSON
+						var jsonDataItems = JSON.parse(JSON
 									.stringify(data["cartItems"]));
-						var jsonDataItems = jsonData["items"];
+						//var jsonDataItems = jsonData["items"];
 						
 						alert("length"+ jsonDataItems.length);
 							//alert("Parse\n"+ JSON.stringify(jsonDataItems["items"]));
 
 						for (var i = 0; i < jsonDataItems.length; i++) {
 								var counter = jsonDataItems[i];
-								console.log(counter.emailID);
-							alert("EMAIL ID:"+ JSON.stringify(counter.emailID)+"\t product ID:"+ JSON.stringify(counter.productID));
-							 
-								 newRow = "<tr>"
-										+ "<td id='productID_"+counter.productID+"' class='productID'>"
-										+ counter.productID
-										+ "</td>"
-										+ "<td id='productName_"+counter.productID+"' class='productName'>"
-										+ counter.productName
-										+ "</td>"
-										+ "<td id='productPrice_"+counter.productID+"' class='productPrice'>"
-										+ counter.productPrice
-										+ "</td>"
-										+ "<td id='productQuantity_"+counter.productID+"' class='quantity'>"
-										+ counter.quantity
-										+ "</td>"
-										+ "<td class='removeFromCartBtn'> <button id='cartBtn_"+counter.productID+"' class='btn btn-primary' onclick='removeFromCartFun("+counter.productID+")'> Remove From Cart </button>  </td>"
-										+ "</tr>";
+								console.log(counter.userid);
+									
+										
+										 newRow = "<tr>"
+												+ "<td id='productID_"+counter.trackid+"' class='trackid'>"
+												+ counter.trackid
+												+ "</td>"
+												+ "<td id='productName_"+counter.albumid+"' class='albumid'>"
+												+ counter.albumid
+												+ "</td>"
+												+ "<td id='productPrice_"+counter.artistid+"' class='artistid'>"
+												+ counter.artistid
+												+ "</td>"
+												+ "<td id='productQuantity_"+counter.genreid+"' class='genreid'>"
+												+ counter.genreid
+												+ "</td>"
+												+ "<td class='removeFromCartBtn'> <button id='cartBtn_"+counter.trackid+"' class='btn btn-primary' onclick='removeFromCartFun("+counter.trackid+")'> Remove From Cart </button>  </td>"
+												+ "</tr>";
+
 										
 								$('#example > tbody > tr:last').after(newRow);  
 
@@ -140,10 +140,10 @@ var email = $.cookie("email");
 </script>
 <script>
 
-function removeFromCartFun(productID)
+function removeFromCartFun(trackid)
 {
-	alert("PRODUCT ID :"+ productID);
-	var cartData= formToJSON(productID);
+	alert("Track ID :"+ trackid);
+	var cartData= formToJSON(trackid);
 	jQuery
 	.ajax({
 		type : "POST",
@@ -176,12 +176,11 @@ function removeFromCartFun(productID)
 	}
 	
 	
-function formToJSON(productID) {
-	var email = $.cookie("email");
-	var emailID= email.replace(/["]+/g,'');
+function formToJSON(trackid) {
+	var userid = $.cookie("userid");
     return JSON.stringify({
-    "productID": productID,	
-    "emailID":emailID
+    "trackid": trackid,	
+    "userid":userid
     });
 }
 </script>
@@ -221,7 +220,7 @@ function checkoutFun(){
 		<div class="container">
 			<div class="header">
 				<div class="logo">
-					<h3>Online Shopping Stores</h3>
+					<h3>Online Music Recommendation Website</h3>
 
 					<p>CmpE 282 - Cloud Services</p>
 					
@@ -249,95 +248,7 @@ function checkoutFun(){
 			
 				
 				<!-- start header menu -->
-				<ul class="megamenu skyblue" id="catalogList">
-					<li><a class="color1" href="home.html">Home</a></li>
-					<li class="grid"><a class="color2" href="#">Computers</a>
-						<div class="megapanel">
-							<div class="row">
-								<div class="col1">
-									<div class="h_nav">
-										<h4>shop</h4>
-										<ul>
-											<li><a href="items.html?id=100">Laptops</a></li>
-											<li><a href="items.html?id=101">Desktops</a></li>
-											<li><a href="items.html?id=102">Software</a></li>
-
-										</ul>
-									</div>
-								</div>
-
-							</div>
-
-						</div></li>
-					<li class="active grid"><a class="color4" href="#">Cell
-							Phones</a>
-						<div class="megapanel">
-							<div class="row">
-								<div class="col1">
-									<div class="h_nav">
-										<h4>shop</h4>
-										<ul>
-											<li><a href="items.html?id=200">Android Cell Phones</a></li>
-											<li><a href="items.html?id=201">Apple iPhones</a></li>
-											<li><a href="items.html?id=202">SIM cards</a></li>
-										</ul>
-									</div>
-								</div>
-
-							</div>
-							<div class="row">
-								<div class="col2"></div>
-								<div class="col1"></div>
-								<div class="col1"></div>
-								<div class="col1"></div>
-								<div class="col1"></div>
-							</div>
-						</div></li>
-
-					<li class="active grid"><a class="color4" href="#">Cameras</a>
-						<div class="megapanel">
-							<div class="row">
-								<div class="col1">
-									<div class="h_nav">
-										<h4>shop</h4>
-										<ul>
-											<li><a href="items.html?id=300">Digital SLR Cameras</a></li>
-											<li><a href="items.html?id=301">Point & Shoot
-													Cameras</a></li>
-											<li><a href="items.html?id=302">Camcorders</a></li>
-										</ul>
-									</div>
-								</div>
-
-							</div>
-							<div class="row">
-								<div class="col2"></div>
-								<div class="col1"></div>
-								<div class="col1"></div>
-								<div class="col1"></div>
-								<div class="col1"></div>
-							</div>
-						</div></li>
-
-					<li><a class="color10" href="contact.html">Contact</a>
-						<div class="megapanel">
-							<div class="row">
-								<div class="col3">
-									<div class="h_nav">
-										<h4>contact us</h4>
-									</div>
-									<form class="contact">
-										<label for="name">Name</label> <input id="name" type="text" />
-										<label for="email">E-mail</label> <input id="email"
-											type="text" /> <label for="message">Message</label>
-										<textarea rows="8" id="message"></textarea>
-										<input type="submit" value="Send" />
-									</form>
-								</div>
-								<div class="col3"></div>
-							</div>
-						</div></li>
-				</ul>
+				
 			</div>
 		</div>
 	</div>
@@ -368,10 +279,10 @@ function checkoutFun(){
 								
 							</tr>
 							<tr>
-								<th>Product ID</th>
-								<th>Product Name</th>
-								<th>Price</th>
-								<th>Quantity</th>
+								<th>Track ID</th>
+								<th>Album ID</th>
+								<th>Artist ID</th>
+								<th>Genre ID</th>
 								<th></th>
 								<th></th>
 							</tr>
@@ -379,10 +290,10 @@ function checkoutFun(){
 
 						<tfoot>
 							<tr>
-								<th>Product ID</th>
-								<th>Product Name</th>
-								<th>Price</th>
-								<th>Quantity</th>
+								<th>Track ID</th>
+								<th>Album ID</th>
+								<th>Artist ID</th>
+								<th>Genre ID</th>
 								<th></th>
 								<th></th>
 							</tr>

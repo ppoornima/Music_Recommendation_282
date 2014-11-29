@@ -1,33 +1,15 @@
 package edu.sjsu.cmpe282.dto;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.auth.profile.ProfileCredentialsProvider;
-import com.amazonaws.regions.Region;
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
-import com.amazonaws.services.dynamodbv2.model.AttributeAction;
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.amazonaws.services.dynamodbv2.model.AttributeValueUpdate;
-import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
-import com.amazonaws.services.dynamodbv2.model.Condition;
-import com.amazonaws.services.dynamodbv2.model.DeleteItemRequest;
-import com.amazonaws.services.dynamodbv2.model.DeleteItemResult;
-import com.amazonaws.services.dynamodbv2.model.ScanRequest;
-import com.amazonaws.services.dynamodbv2.model.ScanResult;
-import com.amazonaws.services.dynamodbv2.model.UpdateItemRequest;
-import com.amazonaws.services.dynamodbv2.model.UpdateItemResult;
 
 public class CartDao {
 	public static final int STATUS_SUCCESS_CODE = 200;
@@ -35,78 +17,70 @@ public class CartDao {
 	public static final int STATUS_ERROR_CODE =500;
 	public static final String STATUS_ERROR_MESSAGE="error";
 
+	Connection conn = null;
+	Statement stmt = null;
 	
-	static AmazonDynamoDBClient client = new AmazonDynamoDBClient(new ProfileCredentialsProvider());
-	public void awsAuthentication()
+	public CartDao()
 	{
+		try{
+			try {
+				Class.forName("com.mysql.jdbc.Driver");
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			//conn = DriverManager.getConnection("jdbc:mysql://localhost/cloudservices","root","root");
 
-		AWSCredentials credentials = new BasicAWSCredentials("AKIAI3QN42KZIHNSDIFA","do3c/rNdJnDW/rlCCSKzT5NvAyzKnw7qeCPvSSYL");
+			conn = DriverManager.getConnection("jdbc:mysql://projectinstance.chtut8njmfxl.us-west-1.rds.amazonaws.com:3306/","root","rootroot"); 
+			System.out.println("COnn:"+conn);
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
 
-		client = new AmazonDynamoDBClient(credentials);
-		Region usWest2 = Region.getRegion(Regions.US_WEST_1);
-		client.setRegion(usWest2);
-
+		}
 	}
 	
 	
-	public String viewItemsInCart (String emailID)
+	public String viewItemsInCart (String userid)
 	{
 		JSONObject response = new JSONObject();
-
-		awsAuthentication();
-
-
-		// can do it in this method also......
-		/*		 HashMap<String, Condition> filter = new HashMap<String, Condition>();
-
-		 Condition hashKeyCondition = new Condition().withComparisonOperator(
-		 ComparisonOperator.EQ.toString()).withAttributeValueList(new AttributeValue().withS(emailID));
-
-		 filter.put("emailID", hashKeyCondition);
-
-		 QueryRequest queryRequest = new QueryRequest().withTableName("cart").withKeyConditions(filter);
-
-		 QueryResult result = client.query(queryRequest);
-		 System.out.println("Query Result:" + result);*/
-
+		
+		
+		
+		JSONArray cartItemArray = new JSONArray();
+		
+		ResultSet rs;
 		System.out.println("---------------------------------------------");
-
-
-		HashMap<String, Condition> scanFilter = new HashMap<String, Condition>();
-
-
-
-		Condition hashKeyCondition1 = new Condition().withComparisonOperator(
-				ComparisonOperator.EQ.toString()).withAttributeValueList(new AttributeValue().withS(emailID));
-
-		scanFilter.put("emailID",hashKeyCondition1 );
-		ScanRequest scanRequest = new ScanRequest("cart").withScanFilter(scanFilter);
-		ScanResult scanResult = client.scan(scanRequest);
-		List<Map<String, AttributeValue>> items = scanResult.getItems();
-		JSONObject cartItems = new JSONObject();
-		JSONArray array = new JSONArray();
-
-		for (Map<?, ?> item : items) {
-			Set s = item.keySet();  
-			Iterator i  = s.iterator(); 
-			JSONObject p = new JSONObject();
-
-			while(i.hasNext()) {
-
-				String key =  (String) i.next();
-				String value = item.get(key).toString();
-				String actualValue = (value.substring(3,(value.length())-2));
-				p.put(key, actualValue);
+		
+		try {
+			stmt = conn.createStatement();
+			
+			String query = "Select * from finalproject.cart where userid = "+userid+";";
+			rs = stmt.executeQuery(query);
+			
+			while(rs.next())
+			{
+				
+				JSONObject cartItems = new JSONObject();
+				cartItems.put("userid", rs.getString(1));
+				cartItems.put("trackid",rs.getString(2));
+				cartItems.put("albumid",rs.getString(3));
+				cartItems.put("artistid",rs.getString(4));
+				cartItems.put("genreid",rs.getString(5));
+			cartItemArray.put(cartItems);	
 			}
-			array.put(p);
-			//System.out.println(p);
+			
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		cartItems.put("items", array);
-		//	System.out.println(cartItems.toString());
+		
 		response.put("statusCode",STATUS_SUCCESS_CODE);
 		response.put("statusMessage", STATUS_SUCCESS_MESSAGE);
-		response.put("cartItems", cartItems);
-		System.out.println(response.toString());
+		response.put("cartItems",cartItemArray );
+		System.out.println("response cart: " +response.toString());
 		return response.toString();
 
 	}
@@ -130,11 +104,12 @@ public class CartDao {
 		String quantity=cart.get("productQuantity").toString();
 		String productName = cart.get("productName").toString() ;
 		String productPrice = cart.get("productPrice").toString();
-
-
 		JSONObject response = new JSONObject();
 
-		awsAuthentication();
+/*
+	
+
+	//	awsAuthentication();
 		String tableName = "cart";
 		Map<String, AttributeValueUpdate> updateItems = new HashMap<String, AttributeValueUpdate>();
 		String timestamp= getCurrentDateTime();
@@ -168,7 +143,7 @@ public class CartDao {
 
 
 
-		UpdateItemResult result = client.updateItem(updateItemRequest);
+		UpdateItemResult result = client.updateItem(updateItemRequest);*/
 		response.put("statusCode",STATUS_SUCCESS_CODE);
 		response.put("statusMessage", STATUS_SUCCESS_MESSAGE);
 		return response.toString();
@@ -177,31 +152,32 @@ public class CartDao {
 
 	public String removeFromCart(String cartItem)
 	{
-		awsAuthentication();
-
+				
 		JSONObject cItem = new JSONObject(cartItem);
-		String emailID= cItem.get("emailID").toString();
-		String productID= cItem.get("productID").toString();
+		String userid= cItem.get("userid").toString();
+		String trackid= cItem.get("trackid").toString();
 		String tableName = "cart";
 		JSONObject response = new JSONObject();
-
-		Map<String, AttributeValue> attributeList = new HashMap<String, AttributeValue>();
-		attributeList.put("emailID", new AttributeValue().withS(emailID));
-		attributeList.put("productID", new AttributeValue().withS(productID));
-
-		for (Map.Entry<String, AttributeValue> item : attributeList.entrySet()) {
-			String attributeName = item.getKey();
-			AttributeValue value = item.getValue();
-			System.out.println("AttributeName"+ attributeName+"\t value "+value);
+		int i = 0;
+		try {
+			stmt = conn.createStatement();
+			
+			String query = "delete from finalproject.cart where userid = "+userid+" and trackid='"+ trackid+ "';";
+			 i = stmt.executeUpdate(query);
+			System.out.println("Number of rows deleted:"+ i);
+					
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-
-
-		DeleteItemRequest deleteItemRequest = new DeleteItemRequest()
-		.withTableName(tableName).withKey(attributeList);
-
-		DeleteItemResult deleteItemResult = client.deleteItem(deleteItemRequest);
-		System.out.println("DELETE ITEM RESULT"+ deleteItemResult);
-
+		
+		if(i<=0)
+		{
+			response.put("statusCode",STATUS_ERROR_CODE);
+			response.put("statusMessage", STATUS_ERROR_MESSAGE);
+			return response.toString();
+		}	
+		
 
 		response.put("statusCode",STATUS_SUCCESS_CODE);
 		response.put("statusMessage", STATUS_SUCCESS_MESSAGE);
@@ -209,4 +185,13 @@ public class CartDao {
 		return response.toString();
 	}
 
+	
+	
+	public static void main(String[] args)
+	{
+		CartDao dao = new CartDao();
+		
+		dao.viewItemsInCart("user1");
+		
+	}
 }
