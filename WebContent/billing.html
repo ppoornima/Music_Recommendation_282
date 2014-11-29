@@ -4,7 +4,7 @@
 
 
 <head>
-<title>Online Shopping Website</title>
+<title>Online Music Recommendation Website</title>
 
 <link href="assets/css/bootstrap.css" rel='stylesheet' type='text/css' />
 <!-- jQuery (necessary JavaScript plugins) -->
@@ -27,18 +27,18 @@
 
 <script type="text/javascript">
 
-var email = $.cookie("email");
-var firstName= $.cookie("firstName") ;
+var userid = $.cookie("userid");
+//var firstName= $.cookie("firstName") ;
 var lastLoginTime = $.cookie("lastLoginTime");
 
-console.log("Value obtained from cookie First Name : "+ firstName );
-console.log("Value obtained from cookie Email : "+ email );
+console.log("Value obtained from cookie userid : "+ userid );
+//console.log("Value obtained from cookie Email : "+ email );
 console.log("Value obtained from cookie lastLoginTime : "+ lastLoginTime );
  
 
 $(document).ready(function(){
 		
-	$("#userNameJQ").append(firstName);
+	$("#userNameJQ").append(userid);
 	$("#lastLoginTime").append(lastLoginTime);	
 });
 
@@ -48,8 +48,8 @@ $(document).ready(function(){
 <script type="text/javascript">
 function signOutFun(){
 	
-	$.removeCookie("email"); 
-	$.removeCookie("firstName"); 
+	$.removeCookie("userid"); 
+	
 	$.removeCookie("lastLoginTime"); 
 
 }

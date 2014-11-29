@@ -59,7 +59,7 @@ public class UserDao {
 			}
 			//conn = DriverManager.getConnection("jdbc:mysql://localhost/cloudservices","root","root");
 
-			conn = DriverManager.getConnection("jdbc:mysql://cloudservices.cvz5dtczqgms.us-west-1.rds.amazonaws.com:3306/user","root","cloudservices"); 
+			conn = DriverManager.getConnection("jdbc:mysql://projectinstance.chtut8njmfxl.us-west-1.rds.amazonaws.com:3306/","root","rootroot"); 
 			System.out.println("COnn:"+conn);
 		}
 		catch (SQLException e) {
@@ -82,15 +82,15 @@ public class UserDao {
 		JSONObject response = new JSONObject();
 		try {
 
-			System.out.println(user.getEmail()+"\t"+user.getFirstName()+"\t"+user.getLastName()+"\t"+ user.getPasswd()+"\t");
+			System.out.println(user.getUserid()+"\t"+ user.getPasswd()+"\t");
 			stmt = conn.createStatement();
-			user.setLastLoginTime(getCurrentDateTime());
-			String query = "INSERT INTO `cloudservices`.`user` (`email`, `firstname`, `lastname`, `password`,`lastloggedintime`) VALUES ('" + user.getEmail() + "', '" + user.getFirstName() + "', '" +user.getLastName()  + "', '" + user.getPasswd() + "','"+user.getLastLoginTime()+"');";
+			user.setLastlogin(getCurrentDateTime());
+			String query = "INSERT INTO `finalproject`.`user` (`userid`, `pwd`,`lastlogin`) VALUES ('"+user.getUserid()  + "', '" + user.getPasswd() + "','"+user.getLastlogin()+"');";
 			stmt.executeUpdate(query);
 			response.put("statusCode",STATUS_SUCCESS_CODE);
 			response.put("statusMessage", STATUS_SUCCESS_MESSAGE);
-			response.put("email", user.getEmail());
-			response.put("firstName",user.getFirstName());
+			response.put("userid", user.getUserid());
+			//response.put("firstName",user.getFirstName());
 			//response.put("lastLoginTime", lastLoginTime);			
 
 		} catch (SQLException e) {
@@ -104,13 +104,13 @@ public class UserDao {
 		return response.toString();
 	}
 
-	public JSONObject updateTime(String email)
+	public JSONObject updateTime(String userid)
 	{
 		JSONObject response = new JSONObject();
 		try {
 			stmt = conn.createStatement();
 
-			String query = "update `cloudservices`.`user` set lastloggedintime = '"+getCurrentDateTime()+"'where email ='"+email+"';";
+			String query = "update `finalproject`.`user` set lastlogin = '"+getCurrentDateTime()+"'where userid ='"+userid+"';";
 			stmt.executeUpdate(query);
 
 		} catch (SQLException e) {
@@ -131,19 +131,17 @@ public class UserDao {
 	public String checkUser(User user){
 		ResultSet rs;
 		String origPasswd = null;
-		String firstName = null;
 		String lastLoginTime = null ;
 		JSONObject response = new JSONObject();
 
 		try {
 			stmt = conn.createStatement();
-			String query = "Select * from cloudservices.user where email = '"+user.getEmail()+"';";
+			String query = "Select * from finalproject.user where userid = '"+user.getUserid()+"';";
 			rs = stmt.executeQuery(query);
 			rs.next();
-			origPasswd = rs.getString("password");
-			firstName =  rs.getString("firstName");
-			lastLoginTime =  rs.getString("lastloggedintime");
-			response = updateTime(user.getEmail());
+			origPasswd = rs.getString("pwd");
+			lastLoginTime =  rs.getString("lastlogin");
+			response = updateTime(user.getUserid());
 			System.out.println("Password from db : "+ origPasswd );
 			System.out.println("Password entered : "+user.getPasswd());
 
@@ -158,8 +156,8 @@ public class UserDao {
 
 			response.put("statusCode",STATUS_SUCCESS_CODE);
 			response.put("statusMessage", STATUS_SUCCESS_MESSAGE);
-			response.put("email", user.getEmail());
-			response.put("firstName",firstName);
+			response.put("userid", user.getUserid());
+			//response.put("firstName",firstName);
 			response.put("lastLoginTime", lastLoginTime);
 
 
@@ -682,7 +680,7 @@ System.out.println("------------------------");
 	public static void main(String[] args)
 	{
 		User u = new User();
-		u.setEmail("pooja@gmail.com");
+		//u.setEmail("pooja@gmail.com");
 		u.setPasswd("1234");
 
 		//	new UserDao().checkUser(u);

@@ -8,20 +8,28 @@ public class User implements Serializable  {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private String firstName;
-	private String lastName;
-	private String email;
-	private String passwd;
-	private String lastLoginTime;
 	
-		
-	public String getLastLoginTime() {
-		return lastLoginTime;
+	private String userid;
+	private String passwd;
+	private String lastlogin;
+	
+	public String getUserid() {
+		return userid;
 	}
 
 
-	public void setLastLoginTime(String lastLoginTime) {
-		this.lastLoginTime = lastLoginTime;
+	public void setUserid(String userid) {
+		this.userid = userid;
+	}
+
+
+	public String getLastlogin() {
+		return lastlogin;
+	}
+
+
+	public void setLastlogin(String lastlogin) {
+		this.lastlogin = lastlogin;
 	}
 
 
@@ -30,35 +38,16 @@ public class User implements Serializable  {
 	}
 	
 		
-	public User(String firstName, String lastName, String email, String passwd) {
+	public User(String userid, String passwd) {
 		super();
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
+		this.userid = userid;
+		
 		this.passwd = passwd;
 	}
 
 
 
-	public String getFirstName() {
-		return firstName;
-	}
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-	public String getLastName() {
-		return lastName;
-	}
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-		//new com.sun.jersey.spi.container.servlet.ServletContainer();
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
+	
 	public String getPasswd() {
 		return passwd;
 	}

@@ -21,7 +21,7 @@ public class UserResource {
 	@Path("/signup")
 	public String signUp(User user) throws ClassNotFoundException {
 		
-		System.out.print("user created: "+user.getFirstName());
+		System.out.print("user created: "+user.getUserid());
 		
 		return userdao.addUser(user);
 	}
@@ -30,7 +30,7 @@ public class UserResource {
 	@Path("/signin")
 	public String signIn(User user)
 	{
-		System.out.println("In Resource"+"\t"+user.getEmail()+"\t"+user.getFirstName()+"\t"+user.getLastName()+"\t"+user.getPasswd());
+	//	System.out.println("In Resource"+"\t"+user.getEmail()+"\t"+user.getFirstName()+"\t"+user.getLastName()+"\t"+user.getPasswd());
 		
 		return userdao.checkUser(user);  //boolean
 		
