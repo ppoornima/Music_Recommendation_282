@@ -1,0 +1,316 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Online Shopping Website</title>
+<link href="assets/css/bootstrap.css" rel='stylesheet' type='text/css' />
+<!-- jQuery (necessary JavaScript plugins) -->
+<script type='text/javascript' src="assets/js/jquery-1.11.1.min.js"></script>
+<!-- Custom Theme files -->
+<link href="assets/css/style.css" rel='stylesheet' type='text/css' />
+<!-- Custom Theme files -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<!--webfont-->
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<!-- start menu -->
+<link href="assets/css/megamenu.css" rel="stylesheet" type="text/css" media="all" />
+<script type="text/javascript" src="assets/js/megamenu.js"></script>
+<script>$(document).ready(function(){$(".megamenu").megamenu();});</script>
+<!-- start slider -->
+<link rel="stylesheet" href="assets/css/fwslider.css" media="all">
+<script src="assets/js/jquery-ui.min.js"></script>
+<script src="assets/js/fwslider.js"></script>
+<script src="assets/js/menu_jquery.js"></script>
+<script src="assets/js/jquery.cookie.js"></script>
+<script type="text/javascript">
+
+var email = $.cookie("email");
+var firstName= $.cookie("firstName") ;
+var lastLoginTime = $.cookie("lastLoginTime");
+
+/* console.log("Value obtained from cookie First Name : "+ firstName );
+console.log("Value obtained from cookie Email : "+ email );
+console.log("Value obtained from cookie lastLoginTime : "+ lastLoginTime );
+ */
+
+$(document).ready(function(){
+		
+	$("#userNameJQ").append(firstName);
+	$("#lastLoginTime").append(lastLoginTime);	
+});
+
+
+</script>
+
+<script type="text/javascript">
+function signOutFun(){
+	
+	$.removeCookie("email"); 
+	$.removeCookie("firstName"); 
+	$.removeCookie("lastLoginTime"); 
+
+}
+</script>
+<script src="constants.js"></script>
+ <script type="text/javascript">
+ function getCatalog()
+ {
+	 alert("button clicked");
+ jQuery.ajax({
+     type: "POST",
+     url: "/cloudservices/rest/users/getCatalog",
+    // data: "101",
+     contentType: "application/json; charset=utf-8",
+     dataType: "json",
+     success: function (data, status, jqXHR) {
+     	
+     	if(JSON.stringify(data["statusCode"])== 200 )
+ 		{
+     	 	alert("Status code : "+ JSON.stringify(data["statusCode"])+"\n Status message: "+ JSON.stringify(data["statusMessage"]) );
+     		alert("data: \n"+ JSON.stringify(data["catalog"])); 
+     		var jsonData = JSON.parse(JSON.stringify(data["catalog"]));
+     		//alert("Parse\n"+ jsonData);
+     	
+     	for (var i = 0; i < jsonData.length; i++) {
+     		    var counter = jsonData[i];
+     		    console.log(counter.catalogName);
+     		    //alert("Product Name" + counter.productName+ "\t Quantity:"+ counter.quantity+"\t Product Price"+counter.productPrice)
+     	
+     		    newli = "<li class='catalogName' value="+counter.catalogID +">"+counter.catalogName+"</li>";
+     	        $('#catalogList').append(newli); 
+     		  
+     		
+     		} 
+ 			
+ 			}
+ 		else
+ 			{
+ 			alert("Status Code: "+ JSON.stringify(data["statusCode"])+"\n Status Message:"+"Error in retreiving products");
+ 			
+ 			}
+ 				    },
+
+     error: function (jqXHR, status) {            
+     	alert(jqXHR+" "+status);
+     }
+
+ });
+ }
+
+
+</script>
+
+
+<!--end slider -->
+</head>
+<body >
+<!-- header_top --> 
+<div class="top_bg">
+<div class="container">
+<div class="header_top">
+	<!-- <div class="top_left">
+		<h2><a href="#">25%off</a> use coupon code "NEW007" and get extra 25% off on orders above 50 dollars </h2>
+	</div> -->
+	<div class="top_right">
+		
+	
+		<ul>	
+			<li><p id= "userNameJQ" class ="UserNameJQ">Hi, </p></li>|
+			<li> <p id="lastLoginTime"> Your last login time was on :</p></li>|
+			<li><a href="index.html" onclick="signOutFun()">Sign Out</a></li>
+		</ul>
+	</div>
+	<div class="clearfix"> </div>
+</div>
+</div>
+</div>
+<!-- header -->
+<div class="header_bg">
+<div class="container">
+	<div class="header">
+	<div class="logo">
+				
+			
+			<h3>Online Shopping Stores</h3>
+			
+			<p>CmpE 282 - Cloud Services</p>
+		</div>
+		<!-- start header_right -->
+						<div >
+
+
+					<div class="search">
+						<form>
+							<input type="text" value="" placeholder="search"> <input
+								type="submit" value="">
+						</form>
+		
+					</div>
+					
+						
+								<div class="cart" >
+									
+					<a href="orderHistory.html" ><h5><b>Order History</b> </h5></a>
+					
+				<a href="cartItems.html"> <img src="assets/img/cart.jpg"
+								height="70" width="70" title="View items in Cart" alt="" /></a>
+</div>	
+				</div>
+		<!-- start header menu -->
+		<ul class="megamenu skyblue" id ="catalogList">
+			<li><a class="color1" href="index.html">Home</a></li>
+			<li class="grid"><a class="color2" href="#">Computers</a>
+				<div class="megapanel">
+					<div class="row">
+						<div class="col1">
+							<div class="h_nav">
+								<h4>shop</h4>
+								<ul>
+									<li><a href="items.html?id=100">Laptops</a></li>
+									<li><a href="items.html?id=101">Desktops</a></li>
+									<li><a href="items.html?id=102">Software</a></li>
+									
+								</ul>	
+							</div>							
+						</div>
+					
+					</div>
+					
+    				</div>
+				</li>
+			<li class="active grid"><a class="color4" href="#">Cell Phones</a>
+				<div class="megapanel">
+			  		<div class="row">
+						<div class="col1">
+							<div class="h_nav">
+								<h4>shop</h4>
+								<ul>
+									<li><a href="items.html?id=200">Android Cell Phones</a></li>
+									<li><a href="items.html?id=201">Apple iPhones</a></li>
+									<li><a href="items.html?id=202">SIM cards</a></li>
+								</ul>	
+							</div>							
+						</div>
+				
+					</div>
+					<div class="row">
+						<div class="col2"></div>
+						<div class="col1"></div>
+						<div class="col1"></div>
+						<div class="col1"></div>
+						<div class="col1"></div>
+					</div>
+    				</div>
+				</li>				
+	
+<li class="active grid"><a class="color4" href="#">Cameras</a>
+				<div class="megapanel">
+			  		<div class="row">
+						<div class="col1">
+							<div class="h_nav">
+								<h4>shop</h4>
+								<ul>
+									<li><a href="items.html?id=300">Digital SLR Cameras</a></li>
+									<li><a href="items.html?id=301">Point & Shoot Cameras</a></li>
+									<li><a href="items.html?id=302">Camcorders</a></li>
+								</ul>	
+							</div>							
+						</div>
+				
+					</div>
+					<div class="row">
+						<div class="col2"></div>
+						<div class="col1"></div>
+						<div class="col1"></div>
+						<div class="col1"></div>
+						<div class="col1"></div>
+					</div>
+    				</div>
+				</li>
+
+				<li><a class="color10" href="contact.html">Contact</a>
+					<div class="megapanel">
+						<div class="row">
+							<div class="col3">
+								<div class="h_nav">
+									<h4>contact us</h4>
+								</div>
+								<form class="contact">
+									<label for="name">Name</label>
+									<input id="name" type="text"/>
+									<label for="email">E-mail</label>
+									<input id="email" type="text"/>
+									<label for="message">Message</label>
+									<textarea rows="8" id="message"></textarea>
+									<input type="submit" value="Send"/>
+								</form>
+							</div>
+							<div class="col3">
+							</div>
+						</div>
+					</div>
+				</li>
+		 </ul> 
+	</div>
+</div>
+</div>
+<!-- content -->
+<div class="container">
+<div class="main">			
+	<!-- start content -->
+	<div class="content">
+		<div class="content_text">
+			<h3>Today's Trends</h3>
+			
+			<!-- <p>Online Shopping Stores</p> -->
+		</div>
+		<!-- grids_of_3 -->
+		<!-- <div class="row grids">
+			<div class="col-md-3 grid1">
+			  <a href="details.html">
+				<img src="assets/img/pic1.jpg" class="img-responsive" alt=""/>
+				<div class="look">			
+					<p>read more</p>
+				</div></a>
+			</div>
+			<div class="col-md-3 grid1">
+			  <a href="details.html">
+				<img src="assets/img/pic2.jpg" class="img-responsive" alt=""/>
+				<div class="look">			
+					
+					<p>read more</p>
+				</div></a>
+			</div>
+			<div class="col-md-3 grid1">
+			  <a href="details.html">
+				<img src="assets/img/pic3.jpg" class="img-responsive" alt=""/>
+				<div class="look">			
+					
+					<p>read more</p>
+				</div></a>
+			</div>
+			<div class="col-md-3 grid1">
+			  <a href="details.html">
+				<img src="assets/img/pic4.jpg" class="img-responsive" alt=""/>
+				<div class="look">			
+					<h4>get scraves</h4>
+					<p>read more</p>
+				</div></a>
+			</div>
+		</div> -->
+		<!-- end grids_of_3 -->
+	</div>
+	<!-- end content -->
+</div>
+</div>
+
+<!-- footer -->
+<div class="footer">
+ <div class="container">
+	<div class="copy">
+		<p class="link">&copy; All rights reserved</p>
+	</div>
+ </div>
+</div>
+</body>
+</html>

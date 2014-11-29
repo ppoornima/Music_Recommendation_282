@@ -1,0 +1,351 @@
+
+<!DOCTYPE HTML>
+<html>
+
+
+<head>
+<title>Online Shopping Website</title>
+
+<link href="assets/css/bootstrap.css" rel='stylesheet' type='text/css' />
+<!-- jQuery (necessary JavaScript plugins) -->
+<script type='text/javascript' src="assets/js/jquery-1.11.1.min.js"></script>
+<!-- Custom Theme files -->
+<link href="assets/css/style.css" rel='stylesheet' type='text/css' />
+<!-- Custom Theme files -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<!--webfont-->
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<!-- start menu -->
+<link href="assets/css/megamenu.css" rel="stylesheet" type="text/css" media="all" />
+<script type="text/javascript" src="assets/js/megamenu.js"></script>
+<script>$(document).ready(function(){$(".megamenu").megamenu();});</script>
+<script src="assets/js/menu_jquery.js"></script>
+
+<script src="assets/js/signUp.js"></script>
+<script src="assets/js/jquery.cookie.js"></script>
+
+<script type="text/javascript">
+
+var email = $.cookie("email");
+var firstName= $.cookie("firstName") ;
+var lastLoginTime = $.cookie("lastLoginTime");
+
+console.log("Value obtained from cookie First Name : "+ firstName );
+console.log("Value obtained from cookie Email : "+ email );
+console.log("Value obtained from cookie lastLoginTime : "+ lastLoginTime );
+ 
+
+$(document).ready(function(){
+		
+	$("#userNameJQ").append(firstName);
+	$("#lastLoginTime").append(lastLoginTime);	
+});
+
+
+</script>
+
+<script type="text/javascript">
+function signOutFun(){
+	
+	$.removeCookie("email"); 
+	$.removeCookie("firstName"); 
+	$.removeCookie("lastLoginTime"); 
+
+}
+</script>
+<script src="constants.js"></script>
+<script>
+
+function orderFun(){
+
+	  var value=  $("#creditCard").val();
+	   alert(value);
+	   
+	var email = $.cookie("email");
+	var emailID= email.replace(/["]+/g,'');
+	alert("QUOTES REMOVED EMAIL ID:"+ emailID);
+	   jQuery
+		.ajax({
+			type : "POST",
+			url : "/cloudservices/rest/users/addPayment",
+			data : emailID,
+			contentType : "application/json; charset=utf-8",
+			dataType : "json",
+			success : function(data, status, jqXHR) {
+
+				if (JSON.stringify(data["statusCode"]) == 200) {
+					alert("Status code : "+ JSON.stringify(data["statusCode"])+"\n Status message: "+ JSON.stringify(data["statusMessage"]) );
+					alert("Order Placed!!!");	
+					window.location.href="orderHistory.html"
+
+				} else {
+					alert("Status Code: "
+							+ JSON.stringify(data["statusCode"])
+							+ "\n Status Message:"
+							+ "Error in retreiving products");
+
+				}
+			},
+
+			error : function(jqXHR, status) {
+				alert(jqXHR + " " + status);
+			}
+
+		});
+}
+	   
+</script>
+
+	</head>
+
+
+<body>
+<!-- header_top -->
+<div class="top_bg">
+<div class="container">
+<div class="header_top">
+		<div class="top_left">
+		<h2><a href="#">25%off</a> use coupon code "NEW007" and get extra 25% off on orders above 50 dollars </h2>
+	</div>
+	<div class="top_right">
+		<ul>
+			
+		<ul>	
+			<li><p id= "userNameJQ" class ="UserNameJQ">Hi, </p></li>|
+			<li> <p id="lastLoginTime"> Your last login time was on :</p></li>|
+			<li><a href="index.html" onclick="signOutFun()">Sign Out</a></li>
+		</ul>
+			
+		</ul>
+	</div>
+	<div class="clearfix"></div>
+</div>
+</div>
+</div>
+<!-- header -->
+<div class="header_bg">
+<div class="container">
+	<div class="header">
+	<div class="logo">
+			<h3>Online Shopping Stores</h3>
+			
+			<p>CmpE 282 - Cloud Services</p>
+		</div>
+		
+		<!-- start header_right -->
+		<div class="header_right">
+		<div class="search">
+		    <form>
+		    	<input type="text" value="" placeholder="search...">
+				<input type="submit" value="">
+			</form>
+		</div>
+		<div class="clearfix"></div>
+		</div>
+
+    </div>
+</div>
+</div>
+<!-- start header menu -->
+				<ul class="megamenu skyblue" id="catalogList">
+					<li><a class="color1" href="home.html">Home</a></li>
+					<li class="grid"><a class="color2" href="#">Computers</a>
+						<div class="megapanel">
+							<div class="row">
+								<div class="col1">
+									<div class="h_nav">
+										<h4>shop</h4>
+										<ul>
+											<li><a href="items.html?id=100">Laptops</a></li>
+											<li><a href="items.html?id=101">Desktops</a></li>
+											<li><a href="items.html?id=102">Software</a></li>
+
+										</ul>
+									</div>
+								</div>
+
+							</div>
+
+						</div></li>
+					<li class="active grid"><a class="color4" href="#">Cell
+							Phones</a>
+						<div class="megapanel">
+							<div class="row">
+								<div class="col1">
+									<div class="h_nav">
+										<h4>shop</h4>
+										<ul>
+											<li><a href="items.html?id=200">Android Cell Phones</a></li>
+											<li><a href="items.html?id=201">Apple iPhones</a></li>
+											<li><a href="items.html?id=202">SIM cards</a></li>
+										</ul>
+									</div>
+								</div>
+
+							</div>
+							<div class="row">
+								<div class="col2"></div>
+								<div class="col1"></div>
+								<div class="col1"></div>
+								<div class="col1"></div>
+								<div class="col1"></div>
+							</div>
+						</div></li>
+
+					<li class="active grid"><a class="color4" href="#">Cameras</a>
+						<div class="megapanel">
+							<div class="row">
+								<div class="col1">
+									<div class="h_nav">
+										<h4>shop</h4>
+										<ul>
+											<li><a href="items.html?id=300">Digital SLR Cameras</a></li>
+											<li><a href="items.html?id=301">Point & Shoot
+													Cameras</a></li>
+											<li><a href="items.html?id=302">Camcorders</a></li>
+										</ul>
+									</div>
+								</div>
+
+							</div>
+							<div class="row">
+								<div class="col2"></div>
+								<div class="col1"></div>
+								<div class="col1"></div>
+								<div class="col1"></div>
+								<div class="col1"></div>
+							</div>
+						</div></li>
+
+					<li><a class="color10" href="contact.html">Contact</a>
+						<div class="megapanel">
+							<div class="row">
+								<div class="col3">
+									<div class="h_nav">
+										<h4>contact us</h4>
+									</div>
+									<form class="contact">
+										<label for="name">Name</label> <input id="name" type="text" />
+										<label for="email">E-mail</label> <input id="email"
+											type="text" /> <label for="message">Message</label>
+										<textarea rows="8" id="message"></textarea>
+										<input type="submit" value="Send" />
+									</form>
+								</div>
+								<div class="col3"></div>
+							</div>
+						</div></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+<!-- content -->
+<div class="container">
+<div class="main">
+	<!-- start registration -->
+	<div class="registration">
+		<div class="registration_left">
+		<h2>Billing Information </h2>
+		
+		<script>
+			(function() {
+		
+			// Create input element for testing
+			var inputs = document.createElement('input');
+			
+			// Create the supports object
+			var supports = {};
+			
+			supports.autofocus   = 'autofocus' in inputs;
+			supports.required    = 'required' in inputs;
+			supports.placeholder = 'placeholder' in inputs;
+		
+			// Fallback for autofocus attribute
+			if(!supports.autofocus) {
+				
+			}
+			
+			// Fallback for required attribute
+			if(!supports.required) {
+				
+			}
+		
+			// Fallback for placeholder attribute
+			if(!supports.placeholder) {
+				
+			}
+			
+			// Change text inside send button on submit
+			var send = document.getElementById('register-submit');
+			if(send) {
+				send.onclick = function () {
+					this.innerHTML = '...Sending';
+				}
+			}
+		
+		})();
+		</script>
+				 <div class="registration_form">
+		 <!-- Form -->
+			<form id="registration_form" onsubmit="return false;">
+				<div>
+					<label>
+					Credit Card Number:<input id="creditCard" placeholder="(has to be 16 -digits only)"  type="text" tabindex="1" pattern="^[0-9]{16}$" required autofocus>
+					</label>
+				</div>
+				<div>
+					<label>
+						Name on Card:   <input id="nameOnCard"  placeholder="Name on Card" type="text" tabindex="2" required>
+					</label>
+				</div>	
+				<div>
+					<label>
+					Card Expiry Month:	<input id="expMonth"   type="number" min="1" max="12" tabindex="2" required>
+					</label>
+					&nbsp
+					<label>
+					Card Expiry Year:	<input id="expYear"  type="number" min="2014" max="2030"  tabindex="2" required>
+					</label>
+					
+				</div>	
+									
+				<div>
+					<label>
+				CVV:	<input id="cvv"  placeholder="CVV" type="number" pattern="^[0-9]{3}$" tabindex="3" required>
+					</label>
+				</div>
+				<div>
+					<label>
+					Billing Address: 	<input id="BillingAddress" placeholder=" Billing Address" type="text" maxlength="30" tabindex="4" required autofocus>
+					</label>
+				</div>
+				<div>
+					<label>
+					 Shipping Address:  	<input id="ShippingAddress" placeholder=" Shipping Address" type="text" maxlength="30" tabindex="5" required autofocus>
+					</label>
+				</div>
+				
+				<button class="btn btn-primary" id="order" onclick="orderFun()" >Order</button>
+					<input type="reset" class="btn btn-primary" id="clear">
+							</form>
+			
+	</div>
+	
+	</div>
+	<div class="clearfix"></div>
+	</div>
+	<!-- end registration -->
+</div>
+</div>
+
+<!-- footer -->
+<div class="footer">
+ <div class="container">
+	<div class="copy">
+		<p class="link">&copy; All rights reserved </p>
+	</div>
+ </div>
+</div>
+</body>
+</html>
