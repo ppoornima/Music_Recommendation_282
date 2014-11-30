@@ -17,12 +17,17 @@ public class ProductsResource {
 
 	ProductsDao productsdao = new ProductsDao();
 	
+	
+	
 	@POST
-	@Path("/getProducts")
-	public String getProducts(String categoryID)
+	@Path("/searchByArtistID")
+	public String getTracks(String artistID)
 	{
+
+		System.out.println("In Resource");
+		return productsdao.getTracks(artistID);
 		
-		
-		return productsdao.getProducts(categoryID);
+	
+
 	}
 }

@@ -246,56 +246,6 @@ public class UserDao {
 
 
 
-	/*public String viewItemsInCart (String emailID)
-	{
-		JSONObject response = new JSONObject();
-
-		
-
-
-		System.out.println("---------------------------------------------");
-
-
-		HashMap<String, Condition> scanFilter = new HashMap<String, Condition>();
-
-
-
-		Condition hashKeyCondition1 = new Condition().withComparisonOperator(
-				ComparisonOperator.EQ.toString()).withAttributeValueList(new AttributeValue().withS(emailID));
-
-		scanFilter.put("emailID",hashKeyCondition1 );
-		ScanRequest scanRequest = new ScanRequest("cart").withScanFilter(scanFilter);
-		ScanResult scanResult = client.scan(scanRequest);
-		List<Map<String, AttributeValue>> items = scanResult.getItems();
-		JSONObject cartItems = new JSONObject();
-		JSONArray array = new JSONArray();
-
-		for (Map<?, ?> item : items) {
-			Set s = item.keySet();  
-			Iterator i  = s.iterator(); 
-			JSONObject p = new JSONObject();
-
-			while(i.hasNext()) {
-
-				String key =  (String) i.next();
-				String value = item.get(key).toString();
-				String actualValue = (value.substring(3,(value.length())-2));
-				p.put(key, actualValue);
-			}
-			array.put(p);
-			//System.out.println(p);
-		}
-		cartItems.put("items", array);
-		//	System.out.println(cartItems.toString());
-		response.put("statusCode",STATUS_SUCCESS_CODE);
-		response.put("statusMessage", STATUS_SUCCESS_MESSAGE);
-		response.put("cartItems", cartItems);
-		System.out.println(response.toString());
-		return response.toString();
-
-	}
-
-*/
 
 
 
