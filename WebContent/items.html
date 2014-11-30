@@ -54,147 +54,14 @@ function signOutFun(){
 </script>
 
 <script type="text/javascript">
- 
- function getTracks()
- {
-	 
-	 var artistid = $.cookie("artistid");
-	 
-	 alert("button clicked"+ "\t artist ID: "+ artistid);
-	 
-	 jQuery
-		.ajax({
-			type : "POST",
-			url : "/cloudservices/rest/products/searchByArtistID",
-			data : artistid,
-			contentType : "application/json; charset=utf-8",
-			dataType : "json",
-			success : function(data, status, jqXHR) {
 
-				if (JSON.stringify(data["statusCode"]) == 200) {
-					alert("Status code : "+ JSON.stringify(data["statusCode"])+"\n Status message: "+ JSON.stringify(data["statusMessage"]) );
-					alert("data: \n"+ JSON.stringify(data["tracks"])); 
-				var jsonDataItems = JSON.parse(JSON
-							.stringify(data["tracks"]));
-				//var jsonDataItems = jsonData["items"];
-				
-				alert("length"+ jsonDataItems.length);
-					//alert("Parse\n"+ JSON.stringify(jsonDataItems["items"]));
-
-				for (var i = 0; i < jsonDataItems.length; i++) {
-						var counter = jsonDataItems[i];
-						console.log(counter.userid);
-							
-								
-								 newRow = "<tr>"
-										+ "<td id='productID_"+counter.trackid+"' class='trackid'>"
-										+ counter.trackid
-										+ "</td>"
-										+ "<td id='productName_"+counter.albumid+"' class='albumid'>"
-										+ counter.albumid
-										+ "</td>"
-										+ "<td id='productQuantity_"+counter.genreid+"' class='genreid'>"
-										+ counter.genreid
-										+ "</td>"
-										+ "<td class='removeFromCartBtn'> <button id='cartBtn_"+counter.trackid+"' class='btn btn-primary' onclick='removeFromCartFun("+counter.trackid+")'> Remove From Cart </button>  </td>"
-										+ "</tr>";
-
-								
-						$('#example > tbody > tr:last').after(newRow);  
-
-				}
-
-				} else {
-					alert("Status Code: "
-							+ JSON.stringify(data["statusCode"])
-							+ "\n Status Message:"
-							+ "Error in retreiving tracks");
-
-				}
-			},
-
-			error : function(jqXHR, status) {
-				alert(jqXHR + " " + status);
-			}
-
-		});
-	 
-	 
- /* jQuery.ajax({
-     type: "POST",
-     url: "/cloudservices/rest/products/searchByArtistID",
-     data: artistID,
-     contentType: "application/json; charset=utf-8",
-     dataType: "json",
-     success: function (data, status, jqXHR) {
-    	 alert("in success!!!");
-     	
-     	if(JSON.stringify(data["statusCode"])== 200 )
- 		{
-     	 	alert("Status code : "+ JSON.stringify(data["statusCode"])+"\n Status message: "+ JSON.stringify(data["statusMessage"]) );
-     		alert("data: \n"+ JSON.stringify(data["tracks"])); 
-     		var jsonData = JSON.parse(JSON.stringify(data["tracks"]));
-     		alert("Length = " + jsondata.length);
- 
-						for (var i = 0; i < jsonDataItems.length; i++) {
-								var counter = jsonDataItems[i];
-								console.log(counter.userid);
-									
-										
-										 newRow = "<tr>"
-												+ "<td id='productID_"+counter.trackid+"' class='trackid'>"
-												+ counter.trackid
-												+ "</td>"
-												+ "<td id='productName_"+counter.albumid+"' class='albumid'>"
-												+ counter.albumid
-												+ "</td>"
-												+ "<td id='productQuantity_"+counter.genreid+"' class='genreid'>"
-												+ counter.genreid
-												+ "</td>"
-												+ "<td class='addToCartBtn'> <button id='cartBtn_"+counter.trackid+"' class='btn btn-primary' onclick='addToCartFun("+counter.trackid+")'> Add To Cart </button>  </td>"
-												+ "</tr>";
-
-										
-								$('#example > tbody > tr:last').after(newRow);  
-
-						}
-     		  
-     		
-     		} 
- 			
- 			
- 		else
- 			{
- 			alert("Status Code: "+ JSON.stringify(data["statusCode"])+"\n Status Message:"+"Error in retreiving products");
- 			
- 			}
-     
- 	},
-
-     error: function (jqXHR, status) {  
-     	alert(jqXHR+" "+status);
-     }
-
- });
-       */
- //}
-
-
-</script>
-
-
-
-<!-- <script type="text/javascript">
-
-function addToCart(trackID)
+function addToCartFun(trackID)
 {
 	
-	var productName = $("#productName_"+ID).text(); //,var productPrice,var quantity, var emailID 
-	var quantity = $("#productQuantity_"+productID+" option:selected").text();
-	alert("quantity:"+ quantity);
-	
-	alert(productName);
-var requestData = formToJSON(productID);
+	var track = $("#track_"+trackID).text(); 
+	var album = $("#album_"+trackID).text(); 
+	var genre = $("#genre_"+trackID).text(); 
+var requestData = formToJSON(track,album,genre);
 alert(requestData);
 	jQuery
 	.ajax({
@@ -231,22 +98,101 @@ alert("Product added to cart!!");
 
 		
 
-function formToJSON(productID) {
-	var email = $.cookie("email");
+function formToJSON(track, album, genre) {
+	var userid = $.cookie("userid");
+	var artist = $.cookie("artistid");
+
     return JSON.stringify({
-    "productID": $("#productID_"+productID).text(),	
-    "productName": $("#productName_"+productID).text(),
-    "productPrice": $("#productPrice_"+productID).text(),
-    "productQuantity": $("#productQuantity_"+productID+" option:selected").text(),
-    "emailID":email
+    	"userid":userid,
+    "trackid": track,	
+    "albumid": album,
+    "genreid": genre,
+    "artistid": artist,
     });
 }
-</script> -->
+</script>
+
+<script type="text/javascript">
+ 
+ function getTracks()
+ {
+	 
+	 var artistid = $.cookie("artistid");
+	 
+	 alert("button clicked"+ "\t artist ID: "+ artistid);
+	 
+	 jQuery
+		.ajax({
+			type : "POST",
+			url : "/cloudservices/rest/products/searchByArtistID",
+			data : artistid,
+			contentType : "application/json; charset=utf-8",
+			dataType : "json",
+			success : function(data, status, jqXHR) {
+
+				if (JSON.stringify(data["statusCode"]) == 200) {
+					alert("Status code : "+ JSON.stringify(data["statusCode"])+"\n Status message: "+ JSON.stringify(data["statusMessage"]) );
+					alert("data: \n"+ JSON.stringify(data["tracks"])); 
+				var jsonDataItems = JSON.parse(JSON
+							.stringify(data["tracks"]));
+				//var jsonDataItems = jsonData["items"];
+				
+				alert("length"+ jsonDataItems.length);
+					//alert("Parse\n"+ JSON.stringify(jsonDataItems["items"]));
+
+				for (var i = 0; i < jsonDataItems.length; i++) {
+						var counter = jsonDataItems[i];
+						console.log(counter.userid);
+							
+								
+								 newRow = "<tr>"
+										+ "<td id='track_"+counter.trackid+"' class='trackid'>"
+										+ counter.trackid
+										+ "</td>"
+										+ "<td id='album_"+counter.trackid+"' class='albumid'>"
+										+ counter.albumid
+										+ "</td>"
+										+ "<td id='genre_"+counter.trackid+"' class='genreid'>"
+										+ counter.genreid
+										+ "</td>"
+										+ "<td class='addToCartBtn'> <button id='cartBtn_"+counter.trackid+"' class='btn btn-primary' onclick='addToCartFun("+counter.trackid+")'> Add to cart </button>  </td>"
+										+ "</tr>";
+
+								
+						$('#example > tbody > tr:last').after(newRow);  
+
+				}
+
+				} else {
+					alert("Status Code: "
+							+ JSON.stringify(data["statusCode"])
+							+ "\n Status Message:"
+							+ "Error in retreiving tracks");
+
+				}
+			},
+
+			error : function(jqXHR, status) {
+				alert(jqXHR + " " + status);
+			}
+
+		});
+ }
+
+
+ </script>
+	 
+	 
+	 
+ 
+
+
+
 
 
 <!--end slider -->
 </head>
-<body onload=getTracks()>
+<body onload="getTracks()">
 	<!-- header_top -->
 	<div class="top_bg">
 		<div class="container">
@@ -320,7 +266,7 @@ function formToJSON(productID) {
 								<th></th>
 								<th></th>
 								<th></th>
-								
+								<th></th>
 								
 								
 							</tr>
@@ -349,7 +295,7 @@ function formToJSON(productID) {
 							<tr>
 								<td></td>
 								<td></td>
-								
+								<td></td>
 								<td></td>
 							
 								

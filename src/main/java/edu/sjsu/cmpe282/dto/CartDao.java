@@ -11,6 +11,8 @@ import java.text.SimpleDateFormat;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import edu.sjsu.cmpe282.domain.Track;
+
 public class CartDao {
 	public static final int STATUS_SUCCESS_CODE = 200;
 	public static final String STATUS_SUCCESS_MESSAGE = "success";
@@ -193,5 +195,32 @@ public class CartDao {
 		
 		dao.viewItemsInCart("user1");
 		
+	}
+
+
+	public String addToCart(Track track) {
+		// TODO Auto-generated method stub
+		JSONObject response = new JSONObject();
+		try 
+		{
+			stmt = conn.createStatement();
+			
+
+			String query = "insert into finalproject.cart values("+track.getUserid()+",'"+track.getTrackid()+
+					"','"+track.getAlbumid()+"','"+track.getArtistid()+"','"+track.getGenreid()+"');";
+			stmt.executeUpdate(query);
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+			response.put("statusCode",STATUS_ERROR_CODE);
+			response.put("statusMessage", STATUS_ERROR_MESSAGE+"\t Error in adding to cart");
+			return response.toString();
+
+		}
+		response.put("statusCode",STATUS_SUCCESS_CODE);
+		response.put("statusMessage", STATUS_SUCCESS_MESSAGE+ "Added to Cart");
+		return response.toString();
+
 	}
 }

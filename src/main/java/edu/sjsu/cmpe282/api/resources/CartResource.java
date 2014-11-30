@@ -7,6 +7,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import edu.sjsu.cmpe282.domain.Track;
 import edu.sjsu.cmpe282.domain.User;
 import edu.sjsu.cmpe282.dto.CartDao;
 
@@ -24,14 +25,14 @@ public class CartResource {
 		
 		return cartdao.viewItemsInCart(emailID);
 	}
-	@POST
-	@Path("/addToCart")
-	public String addToCart(String cartDetails)
-	{
-			
-		return cartdao.updateCart(cartDetails);
-		
-	}
+//	@POST
+//	@Path("/addToCart")
+//	public String addToCart(String cartDetails)
+//	{
+//			
+//		return cartdao.updateCart(cartDetails);
+//		
+//	}
 	
 	@POST
 	@Path("/removeFromCart")
@@ -40,5 +41,12 @@ public class CartResource {
 			
 		return cartdao.removeFromCart(cartItem);
 		
+	}
+
+	@POST
+	@Path("/addToCart")
+	public String addToCart(Track tr)
+	{
+		return cartdao.addToCart( tr);
 	}
 }
