@@ -34,6 +34,14 @@ public class Track  implements Serializable
 	public String getGenreid() {
 		return genreid;
 	}
+	public String getRatings() {
+		return ratings;
+	}
+	public void setRatings(String ratings) {
+		this.ratings = ratings;
+	}
+	public String ratings;
+
 	public void setGenreid(String genreid) {
 		this.genreid = genreid;
 	}

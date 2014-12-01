@@ -34,6 +34,7 @@ import com.amazonaws.services.dynamodbv2.model.UpdateItemRequest;
 import com.amazonaws.services.dynamodbv2.model.UpdateItemResult;
 import com.fasterxml.jackson.databind.introspect.WithMember;
 
+import edu.sjsu.cmpe282.domain.Track;
 import edu.sjsu.cmpe282.domain.User;
 
 public class UserDao {
@@ -42,6 +43,7 @@ public class UserDao {
 	public static final String STATUS_SUCCESS_MESSAGE = "success";
 	public static final int STATUS_ERROR_CODE =500;
 	public static final String STATUS_ERROR_MESSAGE="error";
+	public static final String ZERO ="0";
 
 	Connection conn = null;
 	Statement stmt = null;
@@ -177,50 +179,6 @@ public class UserDao {
 
 
 
-
-
-
-
-
-
-
-
-	public String getCatalog()
-	{
-
-		JSONObject response = new JSONObject();
-		try{
-			
-			JSONArray catalog = new JSONArray();
-			//catalog = getCatalogfromDynamoDB();
-
-			response.put("statusCode",STATUS_SUCCESS_CODE);
-			response.put("statusMessage", STATUS_SUCCESS_MESSAGE);
-			response.put("catalog",catalog);
-
-			System.out.println("response "+ response.toString());
-		}
-		catch (AmazonServiceException ase) {
-			System.err.println(ase.getMessage());
-
-			response.put("statusCode",STATUS_ERROR_CODE);
-			response.put("statusMessage", STATUS_ERROR_MESSAGE);
-			return response.toString();
-
-		} 
-
-		return response.toString();
-
-	}
-
-
-
-
-
-
-
-
-
 	public String addToCart(String email, String productID, String quantity)
 	{
 		
@@ -243,9 +201,6 @@ public class UserDao {
 
 
 	}
-
-
-
 
 
 
@@ -272,7 +227,7 @@ public class UserDao {
 				String genreid = item.get("genreid").toString().trim() ;	
 				String dop = getCurrentDateTime();
 				stmt = conn.createStatement();
-				String query = "INSERT INTO `finalproject`.`orderhistory`  VALUES (" + userid + ", '" + trackid+ "', '" +albumid + "', '" + artistid+ "','"+ genreid+"','"+dop+"');";
+				String query = "INSERT INTO `finalproject`.`orderhistory`  VALUES (" + userid + ", '" + trackid+ "', '" +artistid + "', '" + albumid+ "','"+ZERO+"','"+dop+"');";
 				stmt.executeUpdate(query);
 
 				
@@ -355,12 +310,13 @@ public class UserDao {
 				obj.put("trackid", rs.getString("trackid"));
 				obj.put("albumid", rs.getString("albumid"));
 				obj.put("artistid", rs.getString("artistid"));
+				obj.put("purchasedate", rs.getString("purchasedate"));
 				obj.put("ratings", rs.getString("ratings"));
 
 
 				array.put(obj);
 			}
-			System.out.println("JSON ARRAY:"+ array.toString());
+			System.out.println("JSON ARRAY- ORDER HISTORY:"+ array.toString());
 
 			response.put("orders", array);
 			response.put("statusCode",STATUS_SUCCESS_CODE);
@@ -376,46 +332,35 @@ public class UserDao {
 		}
 
 
-
-
 		return response.toString();
 
-
-
 	}
 
-
-
-
-
-
-	public static void main(String[] args)
+	
+	public String ratetrack(Track t) 
 	{
-		//User u = new User();
-		//u.setEmail("pooja@gmail.com");
-		//u.setPasswd("1234");
+		JSONObject response = new JSONObject();
+		try {
+			stmt = conn.createStatement();
 
-			new UserDao().orderHistory("user1");
+			String query = "update `finalproject`.`orderhistory` set ratings = '"+t.getRatings()+"' where userid ="+t.getUserid()+" and trackid='"+t.getTrackid()+"';";
+			stmt.executeUpdate(query);
 
-		//new UserDao().getProducts("100");
-		// new UserDao().getCategory("1001");
-		//	
-		//	new UserDao().addToCart("poornima@gmail.com", "003","1");
-		//	new UserDao().addToCart("pooja@gmail.com", "002", "2");
-		// new UserDao().addToCart("poornima@gmail.com", "003","3");
-		//new UserDao().getProductByID("001");
-		// new UserDao().removeFromCart("pooja@gmail.com", "002");
-		//	new UserDao().updateCart("pooja@gmail.com", "001", "3");
-		//	new UserDao().updateCart("poornima@gmail.com", "002", "2");
+		} catch (SQLException e) {
 
-		//new UserDao().updateCart("poorni@gmail.com", "003","1");
+			e.printStackTrace();
+			response.put("statusCode",STATUS_ERROR_CODE);
+			response.put("statusMessage", STATUS_ERROR_MESSAGE+"\t Error updating last logged in time!");
+			return response.toString();
 
-		//new UserDao().mainMenuLoad();
-		//new UserDao().viewItemsInCart("pooja@gmail.com");
-		//new UserDao().addOrderPayment("pooja@gmail.com");
-		//	new UserDao().orderHistory("pooja@gmail.com");
+		}
 
+		response.put("statusCode",STATUS_SUCCESS_CODE);
+		response.put("statusMessage", STATUS_SUCCESS_MESSAGE+"\t last logged in time updated");
 
+		return response.toString();
 	}
+
+
 
 }

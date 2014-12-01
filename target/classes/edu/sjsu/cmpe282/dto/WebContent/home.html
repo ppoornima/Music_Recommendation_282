@@ -1,0 +1,189 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Online Music Recommendation Website</title>
+<link href="assets/css/bootstrap.css" rel='stylesheet' type='text/css' />
+<!-- jQuery (necessary JavaScript plugins) -->
+<script type='text/javascript' src="assets/js/jquery-1.11.1.min.js"></script>
+<!-- Custom Theme files -->
+<link href="assets/css/style.css" rel='stylesheet' type='text/css' />
+<!-- Custom Theme files -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<!--webfont-->
+<link href='http://fonts.googleapis.com/css?family=Open+Sans'
+	rel='stylesheet' type='text/css'>
+<!-- start menu -->
+<link href="assets/css/megamenu.css" rel="stylesheet" type="text/css"
+	media="all" />
+<script type="text/javascript" src="assets/js/megamenu.js"></script>
+<script>$(document).ready(function(){$(".megamenu").megamenu();});</script>
+<!-- start slider -->
+<link rel="stylesheet" href="assets/css/fwslider.css" media="all">
+<script src="assets/js/jquery-ui.min.js"></script>
+<script src="assets/js/fwslider.js"></script>
+<script src="assets/js/menu_jquery.js"></script>
+<script src="assets/js/jquery.cookie.js"></script>
+<script type="text/javascript">
+
+var userid = $.cookie("userid");
+//var firstName= $.cookie("firstName") ;
+var lastLoginTime = $.cookie("lastLoginTime");
+
+/* console.log("Value obtained from cookie First Name : "+ firstName );
+console.log("Value obtained from cookie Email : "+ email );
+console.log("Value obtained from cookie lastLoginTime : "+ lastLoginTime );
+ */
+
+$(document).ready(function(){
+		
+	$("#userNameJQ").append(userid);
+	$("#lastLoginTime").append(lastLoginTime);	
+});
+
+
+</script>
+
+<script type="text/javascript">
+function signOutFun(){
+	
+	$.removeCookie("userid"); 
+	$.removeCookie("lastLoginTime"); 
+
+}
+</script>
+
+<script  type="text/javascript">
+
+function find()
+{
+	var artistId = $('#artistID').val();
+	
+	 window.location.href = "/cloudservices/items.html?artistid="+artistId;
+	 
+}
+</script>
+
+
+
+
+
+<!--end slider -->
+</head>
+<body>
+	<!-- header_top -->
+	<div class="top_bg">
+		<div class="container">
+			<div class="header_top">
+				<!-- <div class="top_left">
+		<h2><a href="#">25%off</a> use coupon code "NEW007" and get extra 25% off on orders above 50 dollars </h2>
+	</div> -->
+				<div class="top_right">
+
+
+					<ul>
+						<li><p id="userNameJQ" class="UserNameJQ">Hi,</p></li>|
+						<li>
+							<p id="lastLoginTime">Your last login time was on :</p>
+						</li>|
+						<li><a href="index.html" onclick="signOutFun()">Sign Out</a></li>
+					</ul>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+	</div>
+	<!-- header -->
+	<div class="header_bg">
+		<div class="container">
+			<div class="header">
+				<div class="logo">
+
+
+					<h3>Online Music Recommendation Website</h3>
+
+					<p>CmpE 282 - Cloud Services</p>
+				</div>
+				<!-- start header_right -->
+				<div>
+
+
+
+
+
+					<div class="cart">
+
+						<a href="orderHistory.html"><h5>
+								<b>Order History</b>
+							</h5></a> <a href="cartItems.html"> <img src="assets/img/cart.jpg"
+							height="70" width="70" title="View items in Cart" alt="" /></a>
+					</div>
+				</div>
+				<!-- start header menu -->
+
+			</div>
+		</div>
+	</div>
+	<!-- content -->
+	<div class="container">
+		<div class="main">
+			<!-- start content -->
+			<div class="content">
+			
+			<div>
+						<a href="recommendation.html"><h4>
+								<b>View My Suggestions</b>
+				
+				</h4>
+				</a>
+				</div>
+				
+				<br />
+
+
+				<div>
+					<form id="search" >
+						<div>
+							<label> <input id="artistID"
+								placeholder="Search by Artist ID" type="text" tabindex="1"
+								required>
+							</label>
+							
+						</div>
+
+						<div>
+<!-- 							<button class="btn btn-primary" id="searchbtn1" onclick="find()">Get Tracks</button>
+ -->					
+						<label>
+						<input type="button" id = "submitbtn" value = "Get Tracks!" onclick="find()">
+						
+						</label>
+						
+						</div>
+
+					</form>
+
+				</div>
+
+				<br /> <br /> <br />
+				
+				<div class="content_text">
+
+				</div>
+
+
+			</div>
+			<!-- end content -->
+		</div>
+	</div>
+
+	<!-- footer -->
+	<div class="footer">
+		<div class="container">
+			<div class="copy">
+				<p class="link">&copy; All rights reserved</p>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

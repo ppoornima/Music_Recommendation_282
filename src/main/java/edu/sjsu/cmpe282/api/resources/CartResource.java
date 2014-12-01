@@ -17,30 +17,23 @@ import edu.sjsu.cmpe282.dto.CartDao;
 public class CartResource {
 
 	CartDao cartdao = new CartDao();
-	
+
 	@POST
 	@Path("/viewItemsInCart")
 	public String viewItemsInCart(String emailID)
 	{
-		
+
 		return cartdao.viewItemsInCart(emailID);
 	}
-//	@POST
-//	@Path("/addToCart")
-//	public String addToCart(String cartDetails)
-//	{
-//			
-//		return cartdao.updateCart(cartDetails);
-//		
-//	}
-	
+
+
 	@POST
 	@Path("/removeFromCart")
 	public String removeFromCart(String cartItem)
 	{
-			
+
 		return cartdao.removeFromCart(cartItem);
-		
+
 	}
 
 	@POST

@@ -4,7 +4,7 @@
 
 
 <head>
-<title>Online Music Recommendation Website</title>
+<title>Online Shopping Website</title>
 
 <link href="assets/css/bootstrap.css" rel='stylesheet' type='text/css' />
 <!-- jQuery (necessary JavaScript plugins) -->
@@ -48,10 +48,10 @@ function LogInfun(){
 					
 					if(JSON.stringify(data["statusCode"])== 200 )
 					{ 
-						$.cookie("userid",JSON.stringify(data["userid"]));
-					//	$.cookie("firstName",JSON.stringify(data["firstName"]));
+						$.cookie("email",JSON.stringify(data["email"]));
+						$.cookie("firstName",JSON.stringify(data["firstName"]));
 						$.cookie("lastLoginTime",JSON.stringify(data["lastLoginTime"]));
-						alert(JSON.stringify(data["userid"]));
+						alert(JSON.stringify(data["email"]));
 						//window.location.href = "home.html?firstName="+JSON.stringify(data["firstName"])+"&lastLoginTime="+JSON.stringify(data["lastLoginTime"]);
 					window.location.href="home.html";
 					
@@ -74,7 +74,7 @@ function LogInfun(){
 
 function formToJSON1() {
     return JSON.stringify({
-    "userid": $('#userid1').val(),
+    "email": $('#userName').val(),
     "passwd": $('#password').val(),
     });
     
@@ -102,8 +102,8 @@ function formToJSON1() {
 				{
 		    		alert("Status code : "+ JSON.stringify(data["statusCode"])+"\n Status message: "+ JSON.stringify(data["statusMessage"])+"\n User created successfully" );
 					window.location.href = "home.html";
-					$.cookie("userid",JSON.stringify(data["userid"]));
-					//$.cookie("firstName",JSON.stringify(data["firstName"]));
+					$.cookie("email",JSON.stringify(data["email"]));
+					$.cookie("firstName",JSON.stringify(data["firstName"]));
 					//$.cookie("lastLoginTime",JSON.stringify(data["lastLoginTime"]));
 					}
 				else
@@ -123,7 +123,9 @@ function formToJSON1() {
 
 		function formToJSON() {
 		    return JSON.stringify({
-		    "userid": $('#userid').val(),
+		    "firstName": $('#firstName').val(),
+		    "lastName": $('#lastName').val(),
+		    "email": $('#email').val(),
 		    "passwd": $('#passwd').val()
 		    });
 		}
@@ -131,8 +133,8 @@ function formToJSON1() {
 <script type="text/javascript">
 function signOutFun(){
 	
-	
-	$.removeCookie("userid"); 
+	$.removeCookie("email"); 
+	$.removeCookie("firstName"); 
 	$.removeCookie("lastLoginTime"); 
 
 }
@@ -164,7 +166,7 @@ function signOutFun(){
 <div class="container">
 	<div class="header">
 	<div class="logo">
-			<h3>Online Music Recommendation Website</h3>
+			<h3>Online Shopping Stores</h3>
 			
 			<p>CmpE 282 - Cloud Services</p>
 		</div>
@@ -232,21 +234,30 @@ function signOutFun(){
 		 <div class="registration_form">
 		 <!-- Form -->
 			<form id="registration_form" onsubmit="return false;">
-			
 				<div>
 					<label>
-						<input id="userid" placeholder="User ID" type="text" tabindex="1" required>
+						<input id="firstName" placeholder="first name" type="text" tabindex="1"  pattern="^[a-z A-Z]+$" autofocus>
+					</label>
+				</div>
+				<div>
+					<label>
+						<input id="lastName" placeholder="last name" type="text" tabindex="2"  pattern="^[a-z A-Z]+$" required autofocus>
+					</label>
+				</div>
+				<div>
+					<label>
+						<input id="email" placeholder="email address" type="email" tabindex="3" required>
 					</label>
 				</div>
 			
 				<div>
 					<label>
-						<input id="passwd"  placeholder="password" type="password" tabindex="2"  pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$" required>
+						<input id="passwd"  placeholder="password" type="password" tabindex="4"  pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$" required>
 					</label>
 				</div>						
 				<div>
 					<label>
-						<input id="repasswd"  placeholder="retype password" type="password" tabindex="3" required>
+						<input id="repasswd"  placeholder="retype password" type="password" tabindex="5" required>
 					</label>
 				</div>	
 				
@@ -265,12 +276,12 @@ function signOutFun(){
 			<form id="registration_form" onsubmit="return false;">
 				<div>
 					<label>
-						<input id="userid1" placeholder="User ID" type="text" tabindex="4" required>
+						<input id="userName" placeholder="email" type="email" tabindex="5" required>
 					</label>
 				</div>
 				<div>
 					<label>
-						<input id="password" placeholder="password" type="password" tabindex="5" required>
+						<input id="password" placeholder="password" type="password" tabindex="6" required>
 					</label>
 				</div>							
 				<div>

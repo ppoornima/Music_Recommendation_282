@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>Online Music Recommendation Website</title>
+<title>Online Shopping Website</title>
 <link href="assets/css/bootstrap.css" rel='stylesheet' type='text/css' />
 <!-- jQuery (necessary JavaScript plugins) -->
 <script type='text/javascript' src="assets/js/jquery-1.11.1.min.js"></script>
@@ -36,8 +36,8 @@
 <script src="assets/js/jquery.cookie.js"></script>
 <script type="text/javascript">
 
-var userid = $.cookie("userid");
-//var firstName= $.cookie("firstName") ;
+var email = $.cookie("email");
+var firstName= $.cookie("firstName") ;
 var lastLoginTime = $.cookie("lastLoginTime");
 
 /* console.log("Value obtained from cookie First Name : "+ firstName );
@@ -47,7 +47,7 @@ console.log("Value obtained from cookie lastLoginTime : "+ lastLoginTime );
 
 $(document).ready(function(){
 		
-	$("#userNameJQ").append(userid);
+	$("#userNameJQ").append(firstName);
 	$("#lastLoginTime").append(lastLoginTime);	
 });
 
@@ -57,28 +57,13 @@ $(document).ready(function(){
 <script type="text/javascript">
 function signOutFun(){
 	
-	$.removeCookie("userid"); 
-	//$.removeCookie("firstName"); 
+	$.removeCookie("email"); 
+	$.removeCookie("firstName"); 
 	$.removeCookie("lastLoginTime"); 
 
 }
 </script>
 <script src="constants.js"></script>
-
-<script type="text/javascript">
-function ratetrack(trackid)
-{
-	/* var a = "#ratings_"+trackid;
-	
-	var ratings = $("#ratings_1").val(); */
-	
-	var ratings = $( "#ratings_"+trackid+" option:selected" ).val();	
-	alert("Selected  "+ ratings);
-
-
-
-}
-</script>
 
 <script type="text/javascript">
 	var queryString = window.location.search;
@@ -89,13 +74,13 @@ function ratetrack(trackid)
 	function loadAjaxTable() {
 
 		// AJAX call to get all products from server end on page load
-var userid = $.cookie("userid");
-
+var email = $.cookie("email");
+var emailID= email.replace(/["]+/g,'');
 		jQuery
 				.ajax({
 					type : "POST",
 					url : "/cloudservices/rest/users/orderHistory",
-					data : userid,
+					data : emailID,
 					contentType : "application/json; charset=utf-8",
 					dataType : "json",
 					success : function(data, status, jqXHR) {
@@ -112,49 +97,26 @@ var userid = $.cookie("userid");
 
 						for (var i = 0; i < jsonData.length; i++) {
 								var counter = jsonData[i];
-								//console.log(counter.emailID);
-						//	alert("EMAIL ID:"+ JSON.stringify(counter.emailID)+"\t product ID:"+ JSON.stringify(counter.productID));
+								console.log(counter.emailID);
+							alert("EMAIL ID:"+ JSON.stringify(counter.emailID)+"\t product ID:"+ JSON.stringify(counter.productID));
 							 
-							 newRow = "<tr>"
-									+ "<td id='productID_"+counter.trackid+"' class='trackid'>"
-									+ counter.trackid
-									+ "</td>"
-									+ "<td id='productName_"+counter.albumid+"' class='albumid'>"
-									+ counter.albumid
-									+ "</td>"
-									+ "<td id='productPrice_"+counter.artistid+"' class='artistid'>"
-									+ counter.artistid
-									+ "</td>"
-									/* + "<td id='productQuantity_"+counter.ratings+"' class='ratings'>"
-									+ counter.ratings
-									+ "</td>" */
-									
-									 + "<td class='ratings_'"+counter.trackid+">"
-									 + "<select id='selectid'><option value=10>"+10+"</option>"
-									 +"<option value=20>"+20+"</option>"
-									 +"<option value=30>"+30+"</option>"
-									 +"<option value=40>"+40+"</option>"
-									 +"<option value=50>"+50+"</option>"
-									 +"<option value=60>"+60+"</option>"
-									 +"<option value=70>"+70+"</option>"
-									 +"<option value=80>"+80+"</option>"
-									 +"<option value=90>"+90+"</option>"
-									 +"<option value=100>"+100+"</option>"
-									 +"</select> "
-									 +"<button id='rate"+counter.trackid+"' class='btn btn-primary' onclick='ratetrack("+counter.trackid+")'> Rate It! </button>"
-								 	 /* +"<select id='trackrating_"+counter.trackid+"'>";
-								 	var options ="";
-									for(var j= 0;j<=100;j+10)
-										{
-									 options = options + "<option value="+j+">"+j+"</option>";
-										}
-									
-									newRow += options +"</select>" */ 
-									
-								
-									+ "</td>"
-									+ "</tr>";
-
+								 newRow = "<tr>"
+										+ "<td id='productID_"+counter.productID+"' class='productID'>"
+										+ counter.productID
+										+ "</td>"
+										+ "<td id='productName_"+counter.productID+"' class='productName'>"
+										+ counter.productName
+										+ "</td>"
+										+ "<td id='productPrice_"+counter.productID+"' class='productPrice'>"
+										+ counter.productPrice
+										+ "</td>"
+										+ "<td id='productQuantity_"+counter.productID+"' class='quantity'>"
+										+ counter.productQuantity
+										+ "</td>"
+										+ "<td id='dop_"+counter.productID+"' class='quantity'>"
+										+ counter.dop
+										+ "</td>"
+										+ "</tr>";
 										
 								$('#example > tbody > tr:last').after(newRow);  
 
@@ -164,7 +126,7 @@ var userid = $.cookie("userid");
 							alert("Status Code: "
 									+ JSON.stringify(data["statusCode"])
 									+ "\n Status Message:"
-									+ "Error in retreiving order history Items");
+									+ "Error in retreiving Cart Items");
 
 						}
 					},
@@ -176,7 +138,7 @@ var userid = $.cookie("userid");
 				});
 	}
 </script>
-<!-- <script>
+<script>
 
 function removeFromCartFun(productID)
 {
@@ -222,7 +184,7 @@ function formToJSON(productID) {
     "emailID":emailID
     });
 }
-</script> -->
+</script>
 <script>
 function checkoutFun(){
 	
@@ -287,14 +249,98 @@ function checkoutFun(){
 			
 				
 				<!-- start header menu -->
-				
+				<ul class="megamenu skyblue" id="catalogList">
+					<li><a class="color1" href="home.html">Home</a></li>
+					<li class="grid"><a class="color2" href="#">Computers</a>
+						<div class="megapanel">
+							<div class="row">
+								<div class="col1">
+									<div class="h_nav">
+										<h4>shop</h4>
+										<ul>
+											<li><a href="items.html?id=100">Laptops</a></li>
+											<li><a href="items.html?id=101">Desktops</a></li>
+											<li><a href="items.html?id=102">Software</a></li>
+
+										</ul>
+									</div>
+								</div>
+
+							</div>
+
+						</div></li>
+					<li class="active grid"><a class="color4" href="#">Cell
+							Phones</a>
+						<div class="megapanel">
+							<div class="row">
+								<div class="col1">
+									<div class="h_nav">
+										<h4>shop</h4>
+										<ul>
+											<li><a href="items.html?id=200">Android Cell Phones</a></li>
+											<li><a href="items.html?id=201">Apple iPhones</a></li>
+											<li><a href="items.html?id=202">SIM cards</a></li>
+										</ul>
+									</div>
+								</div>
+
+							</div>
+							<div class="row">
+								<div class="col2"></div>
+								<div class="col1"></div>
+								<div class="col1"></div>
+								<div class="col1"></div>
+								<div class="col1"></div>
+							</div>
+						</div></li>
+
+					<li class="active grid"><a class="color4" href="#">Cameras</a>
+						<div class="megapanel">
+							<div class="row">
+								<div class="col1">
+									<div class="h_nav">
+										<h4>shop</h4>
+										<ul>
+											<li><a href="items.html?id=300">Digital SLR Cameras</a></li>
+											<li><a href="items.html?id=301">Point & Shoot
+													Cameras</a></li>
+											<li><a href="items.html?id=302">Camcorders</a></li>
+										</ul>
+									</div>
+								</div>
+
+							</div>
+							<div class="row">
+								<div class="col2"></div>
+								<div class="col1"></div>
+								<div class="col1"></div>
+								<div class="col1"></div>
+								<div class="col1"></div>
+							</div>
+						</div></li>
+
+					<li><a class="color10" href="contact.html">Contact</a>
+						<div class="megapanel">
+							<div class="row">
+								<div class="col3">
+									<div class="h_nav">
+										<h4>contact us</h4>
+									</div>
+									<form class="contact">
+										<label for="name">Name</label> <input id="name" type="text" />
+										<label for="email">E-mail</label> <input id="email"
+											type="text" /> <label for="message">Message</label>
+										<textarea rows="8" id="message"></textarea>
+										<input type="submit" value="Send" />
+									</form>
+								</div>
+								<div class="col3"></div>
+							</div>
+						</div></li>
+				</ul>
 			</div>
 		</div>
 	</div>
-	<!-- start header menu -->
-		<ul class="megamenu skyblue" id ="catalogList">
-			<li><a class="color1" href="home.html">Home</a></li>
-		 </ul> 
 	<!-- content -->
 	<div class="container">
 		<div class="main">
@@ -318,25 +364,26 @@ function checkoutFun(){
 								<th></th>
 								<th></th>
 								<th></th>
-								
+								<th></th>
 								
 							</tr>
 							<tr>
-							    <th>Track ID</th>
-								<th>Album ID</th>
-								<th>Artist ID</th>
-								<th>Ratings</th>
-
+								<th>Product ID</th>
+								<th>Product Name</th>
+								<th>Price</th>
+								<th>Quantity</th>
+								<th>Date and Time of Purchase</th>
 								
 							</tr>
 						</thead>
 
 						<tfoot>
 							<tr>
-								   <th>Track ID</th>
-								<th>Album ID</th>
-								<th>Artist ID</th>
-								<th>Ratings</th>
+								<th>Product ID</th>
+								<th>Product Name</th>
+								<th>Price</th>
+								<th>Quantity</th>
+								<th>Date and Time of Purchase</th>
 							
 							</tr>
 						</tfoot>
@@ -348,7 +395,7 @@ function checkoutFun(){
 								<td></td>
 								<td></td>
 								<td></td>
-							
+								<td></td>
 								
 								
 							</tr>

@@ -21,7 +21,7 @@ public class CartDao {
 
 	Connection conn = null;
 	Statement stmt = null;
-	
+
 	public CartDao()
 	{
 		try{
@@ -41,49 +41,58 @@ public class CartDao {
 
 		}
 	}
-	
-	
+
+
+	@SuppressWarnings("finally")
 	public String viewItemsInCart (String userid)
 	{
 		JSONObject response = new JSONObject();
-		
-		
-		
+
+
+
 		JSONArray cartItemArray = new JSONArray();
-		
+
 		ResultSet rs;
 		System.out.println("---------------------------------------------");
-		
+
 		try {
 			stmt = conn.createStatement();
-			
+
 			String query = "Select * from finalproject.cart where userid = "+userid+";";
 			rs = stmt.executeQuery(query);
-			
+
 			while(rs.next())
 			{
-				
+
 				JSONObject cartItems = new JSONObject();
 				cartItems.put("userid", rs.getString(1));
 				cartItems.put("trackid",rs.getString(2));
 				cartItems.put("albumid",rs.getString(3));
 				cartItems.put("artistid",rs.getString(4));
 				cartItems.put("genreid",rs.getString(5));
-			cartItemArray.put(cartItems);	
+				cartItemArray.put(cartItems);	
 			}
-			
-			
-			
+
+
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		
+		}finally{
+			
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		response.put("statusCode",STATUS_SUCCESS_CODE);
 		response.put("statusMessage", STATUS_SUCCESS_MESSAGE);
 		response.put("cartItems",cartItemArray );
 		System.out.println("response cart: " +response.toString());
 		return response.toString();
+		}
 
 	}
 	public String getCurrentDateTime()
@@ -93,68 +102,13 @@ public class CartDao {
 		System.out.println("Current Date Time : " + dateFormat.format(date));
 		return dateFormat.format(date);
 	}
-	
-	public String updateCart(String cartDetails)
-	{
-
-		System.out.println("CART DETAILS : "+ cartDetails);
-		JSONObject cart =  new JSONObject(  cartDetails);
-
-		int emailIDLength = cart.get("emailID").toString().length();
-		String emailID = cart.get("emailID").toString().substring(1,emailIDLength-1);
-		String productID =  cart.get("productID").toString();
-		String quantity=cart.get("productQuantity").toString();
-		String productName = cart.get("productName").toString() ;
-		String productPrice = cart.get("productPrice").toString();
-		JSONObject response = new JSONObject();
-
-/*
-	
-
-	//	awsAuthentication();
-		String tableName = "cart";
-		Map<String, AttributeValueUpdate> updateItems = new HashMap<String, AttributeValueUpdate>();
-		String timestamp= getCurrentDateTime();
 
 
 
-		Map<String, AttributeValue> attributeList = new HashMap<String, AttributeValue>();
-		attributeList.put("emailID", new AttributeValue().withS(emailID));
-		attributeList.put("productID", new AttributeValue().withS(productID));
-
-
-
-		updateItems.put("quantity", 
-				new AttributeValueUpdate()
-		.withAction(AttributeAction.ADD)
-		.withValue(new AttributeValue().withN("+"+quantity)));
-
-		updateItems.put("productName", new AttributeValueUpdate().withAction(AttributeAction.PUT)
-				.withValue(new AttributeValue().withS(productName)));
-
-		updateItems.put("timestamp", new AttributeValueUpdate().withAction(AttributeAction.PUT)
-				.withValue(new AttributeValue().withS(timestamp)));
-		updateItems.put("productPrice", new AttributeValueUpdate().withAction(AttributeAction.PUT)
-				.withValue(new AttributeValue().withS(productPrice)));
-
-
-		UpdateItemRequest updateItemRequest = new UpdateItemRequest()
-		.withTableName(tableName)
-		.withKey(attributeList)
-		.withAttributeUpdates(updateItems);
-
-
-
-		UpdateItemResult result = client.updateItem(updateItemRequest);*/
-		response.put("statusCode",STATUS_SUCCESS_CODE);
-		response.put("statusMessage", STATUS_SUCCESS_MESSAGE);
-		return response.toString();
-
-	}
-
+	@SuppressWarnings("finally")
 	public String removeFromCart(String cartItem)
 	{
-				
+
 		JSONObject cItem = new JSONObject(cartItem);
 		String userid= cItem.get("userid").toString();
 		String trackid= cItem.get("trackid").toString();
@@ -163,48 +117,57 @@ public class CartDao {
 		int i = 0;
 		try {
 			stmt = conn.createStatement();
-			
+
 			String query = "delete from finalproject.cart where userid = "+userid+" and trackid='"+ trackid+ "';";
-			 i = stmt.executeUpdate(query);
+			i = stmt.executeUpdate(query);
 			System.out.println("Number of rows deleted:"+ i);
-					
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+finally{
+			
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		if(i<=0)
 		{
 			response.put("statusCode",STATUS_ERROR_CODE);
 			response.put("statusMessage", STATUS_ERROR_MESSAGE);
 			return response.toString();
 		}	
-		
+
 
 		response.put("statusCode",STATUS_SUCCESS_CODE);
 		response.put("statusMessage", STATUS_SUCCESS_MESSAGE);
 
 		return response.toString();
+}
 	}
 
-	
-	
+
+
 	public static void main(String[] args)
 	{
 		CartDao dao = new CartDao();
-		
+
 		dao.viewItemsInCart("user1");
-		
+
 	}
 
 
 	public String addToCart(Track track) {
-		// TODO Auto-generated method stub
+
 		JSONObject response = new JSONObject();
 		try 
 		{
 			stmt = conn.createStatement();
-			
+
 
 			String query = "insert into finalproject.cart values("+track.getUserid()+",'"+track.getTrackid()+
 					"','"+track.getAlbumid()+"','"+track.getArtistid()+"','"+track.getGenreid()+"');";
@@ -217,6 +180,14 @@ public class CartDao {
 			response.put("statusMessage", STATUS_ERROR_MESSAGE+"\t Error in adding to cart");
 			return response.toString();
 
+		}finally{
+			
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		response.put("statusCode",STATUS_SUCCESS_CODE);
 		response.put("statusMessage", STATUS_SUCCESS_MESSAGE+ "Added to Cart");

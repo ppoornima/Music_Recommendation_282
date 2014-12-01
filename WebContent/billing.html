@@ -4,7 +4,7 @@
 
 
 <head>
-<title>Online Music Recommendation Website</title>
+<title>Online Shopping Website</title>
 
 <link href="assets/css/bootstrap.css" rel='stylesheet' type='text/css' />
 <!-- jQuery (necessary JavaScript plugins) -->
@@ -27,18 +27,18 @@
 
 <script type="text/javascript">
 
-var userid = $.cookie("userid");
-//var firstName= $.cookie("firstName") ;
+var email = $.cookie("email");
+var firstName= $.cookie("firstName") ;
 var lastLoginTime = $.cookie("lastLoginTime");
 
-console.log("Value obtained from cookie userid : "+ userid );
-//console.log("Value obtained from cookie Email : "+ email );
+console.log("Value obtained from cookie First Name : "+ firstName );
+console.log("Value obtained from cookie Email : "+ email );
 console.log("Value obtained from cookie lastLoginTime : "+ lastLoginTime );
  
 
 $(document).ready(function(){
 		
-	$("#userNameJQ").append(userid);
+	$("#userNameJQ").append(firstName);
 	$("#lastLoginTime").append(lastLoginTime);	
 });
 
@@ -48,8 +48,8 @@ $(document).ready(function(){
 <script type="text/javascript">
 function signOutFun(){
 	
-	$.removeCookie("userid"); 
-	
+	$.removeCookie("email"); 
+	$.removeCookie("firstName"); 
 	$.removeCookie("lastLoginTime"); 
 
 }
@@ -62,12 +62,14 @@ function orderFun(){
 	  var value=  $("#creditCard").val();
 	   alert(value);
 	   
-	var userid = $.cookie("userid");
+	var email = $.cookie("email");
+	var emailID= email.replace(/["]+/g,'');
+	alert("QUOTES REMOVED EMAIL ID:"+ emailID);
 	   jQuery
 		.ajax({
 			type : "POST",
 			url : "/cloudservices/rest/users/addPayment",
-			data : userid,
+			data : emailID,
 			contentType : "application/json; charset=utf-8",
 			dataType : "json",
 			success : function(data, status, jqXHR) {
@@ -126,7 +128,7 @@ function orderFun(){
 <div class="container">
 	<div class="header">
 	<div class="logo">
-			<h3>Online Music Recommendation Website</h3>
+			<h3>Online Shopping Stores</h3>
 			
 			<p>CmpE 282 - Cloud Services</p>
 		</div>
@@ -139,10 +141,6 @@ function orderFun(){
 				<input type="submit" value="">
 			</form>
 		</div>
-								<div class="cart" >
-				<a href="home.html"> <img src="assets/img/cart.jpg"
-								height="70" width="70" title="View items in Cart" alt="" /></a>
-</div>	
 		<div class="clearfix"></div>
 		</div>
 
@@ -150,14 +148,98 @@ function orderFun(){
 </div>
 </div>
 <!-- start header menu -->
-				
+				<ul class="megamenu skyblue" id="catalogList">
+					<li><a class="color1" href="home.html">Home</a></li>
+					<li class="grid"><a class="color2" href="#">Computers</a>
+						<div class="megapanel">
+							<div class="row">
+								<div class="col1">
+									<div class="h_nav">
+										<h4>shop</h4>
+										<ul>
+											<li><a href="items.html?id=100">Laptops</a></li>
+											<li><a href="items.html?id=101">Desktops</a></li>
+											<li><a href="items.html?id=102">Software</a></li>
+
+										</ul>
+									</div>
+								</div>
+
+							</div>
+
+						</div></li>
+					<li class="active grid"><a class="color4" href="#">Cell
+							Phones</a>
+						<div class="megapanel">
+							<div class="row">
+								<div class="col1">
+									<div class="h_nav">
+										<h4>shop</h4>
+										<ul>
+											<li><a href="items.html?id=200">Android Cell Phones</a></li>
+											<li><a href="items.html?id=201">Apple iPhones</a></li>
+											<li><a href="items.html?id=202">SIM cards</a></li>
+										</ul>
+									</div>
+								</div>
+
+							</div>
+							<div class="row">
+								<div class="col2"></div>
+								<div class="col1"></div>
+								<div class="col1"></div>
+								<div class="col1"></div>
+								<div class="col1"></div>
+							</div>
+						</div></li>
+
+					<li class="active grid"><a class="color4" href="#">Cameras</a>
+						<div class="megapanel">
+							<div class="row">
+								<div class="col1">
+									<div class="h_nav">
+										<h4>shop</h4>
+										<ul>
+											<li><a href="items.html?id=300">Digital SLR Cameras</a></li>
+											<li><a href="items.html?id=301">Point & Shoot
+													Cameras</a></li>
+											<li><a href="items.html?id=302">Camcorders</a></li>
+										</ul>
+									</div>
+								</div>
+
+							</div>
+							<div class="row">
+								<div class="col2"></div>
+								<div class="col1"></div>
+								<div class="col1"></div>
+								<div class="col1"></div>
+								<div class="col1"></div>
+							</div>
+						</div></li>
+
+					<li><a class="color10" href="contact.html">Contact</a>
+						<div class="megapanel">
+							<div class="row">
+								<div class="col3">
+									<div class="h_nav">
+										<h4>contact us</h4>
+									</div>
+									<form class="contact">
+										<label for="name">Name</label> <input id="name" type="text" />
+										<label for="email">E-mail</label> <input id="email"
+											type="text" /> <label for="message">Message</label>
+										<textarea rows="8" id="message"></textarea>
+										<input type="submit" value="Send" />
+									</form>
+								</div>
+								<div class="col3"></div>
+							</div>
+						</div></li>
+				</ul>
 			</div>
 		</div>
 	</div>
-	<!-- start header menu -->
-		<ul class="megamenu skyblue" id ="catalogList">
-			<li><a class="color1" href="home.html">Home</a></li>
-		 </ul> 
 <!-- content -->
 <div class="container">
 <div class="main">
